@@ -3,6 +3,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from tensorflow.keras.utils import to_categorical
 from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense,Flatten,Dropout
+from tensorflow.keras.layers import Conv2D,MaxPooling2D
+
 
 train_df = pd.read_csv("C:/Users/Asus/OneDrive/Documents/ml project datasets/fashion apprealdataset/fashion-mnist_train.csv")
 test_df = pd.read_csv("C:/Users/Asus/OneDrive/Documents/ml project datasets/fashion apprealdataset/fashion-mnist_test.csv")
@@ -57,3 +61,36 @@ print("data shapes ")
 print("training data ",x_train.shape,y_train_cato.shape)
 print("validation data  ",x_val.shape,y_val_cato.shape)
 print("testing data ",x_test.shape,y_test_cato.shape)
+
+#CNN model creation
+model = Sequential()
+
+# 1st convolutional layer
+model.add(Conv2D(32,(3,3),activation='relu',input_shape=(28,28,1)))
+
+#1st pooling layer
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+#2nd convolution layer
+model.add(Conv2D(64,(3,3),activation='relu'))
+
+# 2nd pooling layer
+model.add(MaxPooling2D(pool_size=(2,2)))
+
+#flattern layer
+model.add(Flatten())
+
+# fully connected layer
+model.add(Dense(128,activation='relu'))
+
+# dropout layer
+model.add(Dropout(0.5))
+
+#output layer
+model.add(Dense(10,activation='softmax'))
+
+model.summary()
+
+#complie setup
+model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
+
