@@ -94,3 +94,34 @@ model.summary()
 #complie setup
 model.compile(loss='categorical_crossentropy',optimizer='adam',metrics=['accuracy'])
 
+# model training
+history = model.fit(x_train,y_train_cato,epochs=10,batch_size = 64,validation_data=(x_val,y_val_cato))
+
+# accuracy and loss graph
+plt.figure(figsize = (12,4))
+plt.subplot(1,2,1)
+plt.plot(history.history["accuracy"],label = "train accuracy")
+plt.plot(history.history["val_accuracy"],label = "val accuracy")
+plt.legend()
+plt.title("model accuracy")
+
+# loss  graph
+plt.subplot(1,2,2)
+plt.plot(history.history["loss"],label = "train loss")
+plt.plot(history.history["val_loss"],label = "val loss")
+plt.legend()
+plt.title("model_loss")
+plt.show()
+
+# test data evaluation
+test_loss, test_acc = model.evaluate(x_test,y_test_cato)
+print("test loss : ",test_loss)
+print("test accuracy : ",test_acc)
+
+# final prediction sample
+index = 5
+img = x_test[index].reshape(1,28,28,1)
+prediction = model.predict(img)
+predicted_class = np.argmax(prediction)
+print("predicted = ",class_names[predicted_class])
+print("actual = ",class_names[y_test[index]])
