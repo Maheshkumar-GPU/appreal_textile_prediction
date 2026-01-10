@@ -6,6 +6,8 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense,Flatten,Dropout
 from tensorflow.keras.layers import Conv2D,MaxPooling2D
+from sklearn.metrics import confusion_matrix, classification_report
+import seaborn as sns
 
 
 train_df = pd.read_csv("C:/Users/Asus/OneDrive/Documents/ml project datasets/fashion apprealdataset/fashion-mnist_train.csv")
@@ -125,3 +127,28 @@ prediction = model.predict(img)
 predicted_class = np.argmax(prediction)
 print("predicted = ",class_names[predicted_class])
 print("actual = ",class_names[y_test[index]])
+
+# predict all images
+y_pred = model.predict(x_test)
+y_pred_class = np.argmax(y_pred,axis=1)
+
+# confusion matrix
+cm = confusion_matrix(y_test,y_pred_class)
+
+# ploting
+plt.figure(figsize = (12,12))
+sns.heatmap(cm,annot=True,fmt="d",xticklabels=class_names,yticklabels=class_names)
+plt.xlabel("Predicted")
+plt.ylabel("Actual")
+plt.title("Confusion Matrix")
+plt.show()
+
+# classification report
+print(classification_report(y_test,y_pred_class,target_names=class_names))
+
+# model saving
+
+model.save("appreal_textile.h5")
+print("model saved successfully ")
+
+
